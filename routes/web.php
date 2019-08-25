@@ -17,4 +17,20 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');    //{{ route('home') }}
+
+//Specialty
+Route::get('/specialties', 'SpecialtyController@index');
+Route::get('/specialties/create', 'SpecialtyController@create'); //form registro
+Route::get('/specialties/{specialty}/edit', 'SpecialtyController@edit');
+
+Route::post('/specialties', 'SpecialtyController@store'); //envio form
+Route::put('/specialties/{specialty}', 'SpecialtyController@update');
+Route::delete('/specialties/{specialty}', 'SpecialtyController@destroy');
+
+//doctors
+
+Route::resource('doctors', 'DoctorController');
+
+
+//pacients

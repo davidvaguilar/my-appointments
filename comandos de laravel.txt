@@ -4,3 +4,5 @@ composer create-project --prefer-dist laravel/laravel blog "5.5.*"
 php artisan make:auth
 
 php artisan migrate
+
+php artisan make:model Specialty -mc

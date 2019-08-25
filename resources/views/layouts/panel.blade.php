@@ -54,8 +54,6 @@
           @include('includes.panel.dropdown_menu')
         </li>
       </ul>
-
-
       <!-- Collapse -->
       <div class="collapse navbar-collapse" id="sidenav-collapse-main">
         <!-- Collapse header -->
@@ -74,7 +72,6 @@
             </div>
           </div>
         </div>
-
         @include('includes.panel.menu')
       </div>
     </div>
@@ -85,7 +82,7 @@
     <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
       <div class="container-fluid">
         <!-- Brand -->
-        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="./index.html">Dashboard</a>
+        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="./index.html">Panel de Administración</a>
         <!-- Form -->
         <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
           <div class="form-group mb-0">
@@ -113,9 +110,6 @@
             @include('includes.panel.dropdown_menu')
           </li>
         </ul>
-
-
-
       </div>
     </nav>
     <!-- Header -->
@@ -127,7 +121,6 @@
       @yield('content')
       <!-- Footer -->
       @include('includes.panel.footer')
-
     </div>
   </div>
   <!-- Argon Scripts -->
