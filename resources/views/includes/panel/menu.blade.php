@@ -16,7 +16,7 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="./pacients">
+    <a class="nav-link" href="./patients">
       <i class="ni ni-single-02 text-yellow"></i> Pacientes
     </a>
   </li>
