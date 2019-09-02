@@ -35,7 +35,6 @@
         </tr>
       </thead>
       <tbody>
-
         @foreach( $patients as $patient )
         <tr>
           <th scope="row">
@@ -60,6 +59,9 @@
 
       </tbody>
     </table>
+  </div>
+  <div class="card-footer py-4">
+    {{ $patients->links() }}
   </div>
 </div>
 
