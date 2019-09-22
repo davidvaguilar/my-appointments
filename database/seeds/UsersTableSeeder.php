@@ -19,17 +19,19 @@ class UsersTableSeeder extends Seeder
         'role'=> 'admin'
       ]);
       User::create([
-        'name' => 'Maria',
-        'email' => 'maria@gmail.com',
+        'name' => 'Paciente Test',
+        'email' => 'paciente@correo.com',
         'password' => bcrypt('123123'),
         'role'=> 'patient'
       ]);
       User::create([
-        'name' => 'Pepe',
-        'email' => 'pepe@gmail.com',
+        'name' => 'Medico Test',
+        'email' => 'doctor@correo.com',
         'password' => bcrypt('123123'),
         'role'=> 'doctor'
       ]);
-      factory(User::class, 50)->create();
+
+      //factory(User::class, 50)->create();
+      factory(User::class, 50)->states('patient')->create();
     }
 }

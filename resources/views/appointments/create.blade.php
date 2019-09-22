@@ -25,31 +25,44 @@
         </ul>
       </div>
     @endif
-    <form action="{{ url('/patients') }}" method="POST">
+    <form action="{{ url('appointments') }}" method="POST">
       {{ csrf_field() }}
       <div class="form-group">
-        <label for="specialty">Especialidad</label>
-        <select name="specialty_id" id="specialty" class="form-control" required>
-          <option value="">Seleccionar especialidad</option>
-          @foreach( $specialties as $specialty )
-            <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
-          @endforeach
-        </select>
+        <label for="description">Descripción</label>
+        <input name="description" id="description" value="{{ old('description') }}" type="text" class="form-control" placeholder="Describe brevemente la consulta" required>
       </div>
-      <div class="form-group">
-        <label for="doctor">Médico</label>
-        <select name="doctor_id" id="doctor" class="form-control">
 
-        </select>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="specialty">Especialidad</label>
+          <select name="specialty_id" id="specialty" class="form-control" required>
+            <option value="">Seleccionar especialidad</option>
+            @foreach( $specialties as $specialty )
+              <option value="{{ $specialty->id }}" @if( old('specialty_id') == $specialty->id ) selected @endif>{{ $specialty->name }}</option>
+            @endforeach
+          </select>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="doctor">Médico</label>
+          <select name="doctor_id" id="doctor" class="form-control" required>
+
+            @foreach( $doctors as $doctor )
+              <option value="{{ $doctor->id }}" @if( old('doctor_id') == $doctor->id ) selected @endif>{{ $doctor->name }}</option>
+            @endforeach
+
+          </select>
+        </div>
       </div>
+
       <div class="form-group">
         <label for="dni">Fecha</label>
         <div class="input-group input-group-alternative">
           <div class="input-group-prepend">
              <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
           </div>
-          <input class="form-control datepicker" placeholder="Seleccionar fecha" type="text" id="date"
-                  value="{{ date('Y-m-d') }}"
+          <input class="form-control datepicker" placeholder="Seleccionar fecha" type="text"
+                  id="date" name="scheduled_date"
+                  value="{{ old('scheduled_date', date('Y-m-d')) }}"
                   data-date-format="yyyy-mm-dd"
                   data-date-start-date="{{ date('Y-m-d') }}"
                   data-date-end-date="+30d">
@@ -58,15 +71,46 @@
 
       <div class="form-group">
         <label for="address">Hora de atencion</label>
-        <input type="text" name="address" class="form-control" value="{{ old('address') }}">
+        <div id="hours">
+          @if( $intervals )
+            @foreach( $intervals['morning'] as $key => $interval )
+              <div class="custom-control custom-radio mb-3">
+                <input name="scheduled_time" value="{{ $interval['start'] }}" class="custom-control-input" id="intervalMorning{{ $key }}" type="radio" required>
+                <label class="custom-control-label" for="intervalMorning{{ $key }}">{{ $interval['start'] }} - {{ $interval['end'] }}</label>
+              </div>
+            @endforeach
+            @foreach( $intervals['afternoon'] as $interval )
+              <div class="custom-control custom-radio mb-3">
+                <input name="scheduled_time" value="{{ $interval['start'] }}" class="custom-control-input" id="intervalMorning{{ $key }}" type="radio" required>
+                <label class="custom-control-label" for="intervalAfternoon{{ $key }}">{{ $interval['start'] }} - {{ $interval['end'] }}</label>
+              </div>
+            @endforeach
+          @else
+            <div class="alert alert-info" role="alert">
+              Seleccion un medio y una fecha, para ver sus horas disponibles.
+            </div>
+          @endif
+        </div>
       </div>
       <div class="form-group">
-        <label for="phone">Telefono / movil</label>
-        <input type="text" name="phone" class="form-control" value="{{ old('phone') }}">
+        <label for="type">Tipo de consulta</label>
+        <div class="custom-control custom-radio mb-3">
+          <input name="type" class="custom-control-input" id="type1" type="radio"
+              @if( old('type', 'Consulta') == 'Consulta' ) checked @endif value="Consulta">
+          <label class="custom-control-label" for="type1">Consulta</label>
+        </div>
+        <div class="custom-control custom-radio mb-3">
+          <input name="type" class="custom-control-input" id="type2"  type="radio"
+              @if( old('type') == 'Examen' ) checked @endif value="Examen">
+          <label class="custom-control-label" for="type2">Examen</label>
+        </div>
+        <div class="custom-control custom-radio mb-3">
+          <input name="type" class="custom-control-input" id="type3"  type="radio"
+              @if( old('type') == 'Operación' ) checked @endif value="Operación">
+          <label class="custom-control-label" for="type3">Operación</label>
+        </div>
       </div>
-
       <button type="submit" class="btn btn-primary"> Guardar </button>
-
     </form>
   </div>
 </div>
@@ -76,12 +120,17 @@
 @section('scripts')
   <script src="{{ asset('/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
   <script>
-    let $doctor, $date, $specialty;
+    let $doctor, $date, $specialty, $hours;
+    let iRadio;
+    const noHoursAlert = `<div class="alert alert-danger" role="alert">
+        <strong>Lo sentimos!</strong> No se encontraron horas disponibles para el medico en el dia seleccionado.
+      </div>`;
 
     $(function() {
       $specialty = $('#specialty');
       $doctor = $('#doctor');
       $date = $('#date');
+      $hours = $('#hours');
 
       $specialty.change(() => {
         const specialtyId = $specialty.val();
@@ -99,7 +148,7 @@
         htmlOptions += `<option value="${doctor.id}">${doctor.name}</option>`;
       });
       $doctor.html(htmlOptions);
-      loadHours()
+      loadHours();  //side-effect
     }
 
     function loadHours(){
@@ -110,18 +159,35 @@
     }
 
     function displayHours(data){
+      if( !data.morning && !data.afternoon ){
+        $hours.html(noHoursAlert);
+        return;
+      }
+      let htmlHours = '';
+      iRadio = 0;
       if( data.morning ){
-        const morning_intervals =data.morning;
+        const morning_intervals = data.morning;
         morning_intervals.forEach(interval => {
-          console.log(`${interval.start} - ${interval.end}`);
+          htmlHours += getRadioIntervalHtml(interval);
+          //console.log(`${interval.start} - ${interval.end}`);
         });
       }
       if( data.afternoon ){
-        const afternoon_intervals =data.afternoon;
+        const afternoon_intervals = data.afternoon;
         afternoon_intervals.forEach(interval => {
-          console.log(`${interval.start} - ${interval.end}`);
+          htmlHours += getRadioIntervalHtml(interval);
+          //console.log(`${interval.start} - ${interval.end}`);
         });
       }
+      $hours.html(htmlHours);
+    }
+
+    function getRadioIntervalHtml(interval) {
+      const text = `${interval.start} - ${interval.end}`;
+      return `<div class="custom-control custom-radio mb-3">
+          <input name="scheduled_time" value="${interval.start}" class="custom-control-input" id="interval${iRadio}" type="radio">
+          <label class="custom-control-label" for="interval${iRadio++}">${text}</label>
+        </div>`;
     }
 
   </script>
