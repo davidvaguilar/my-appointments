@@ -79,7 +79,7 @@
                 <label class="custom-control-label" for="intervalMorning{{ $key }}">{{ $interval['start'] }} - {{ $interval['end'] }}</label>
               </div>
             @endforeach
-            @foreach( $intervals['afternoon'] as $interval )
+            @foreach( $intervals['afternoon'] as $key => $interval )
               <div class="custom-control custom-radio mb-3">
                 <input name="scheduled_time" value="{{ $interval['start'] }}" class="custom-control-input" id="intervalMorning{{ $key }}" type="radio" required>
                 <label class="custom-control-label" for="intervalAfternoon{{ $key }}">{{ $interval['start'] }} - {{ $interval['end'] }}</label>
