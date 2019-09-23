@@ -32,6 +32,10 @@ Route::middleware(['auth', 'admin'])->namespace('Admin')->group(function() {
   Route::resource('/doctors', 'DoctorController');
   //pacients
   Route::resource('/patients', 'PatientController');
+
+  Route::get('/charts/appointments/line', 'ChartController@appointments');
+  Route::get('/charts/doctors/column', 'ChartController@doctors');
+  Route::get('/charts/doctors/column/data', 'ChartController@doctorsJson');
 });
 
 
