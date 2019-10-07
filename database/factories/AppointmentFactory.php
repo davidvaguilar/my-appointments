@@ -15,7 +15,7 @@ $factory->define(Appointment::class, function (Faker $faker) {
 
     return [
         'description' => $faker->sentence(5),
-        'specialty_id' => $faker->numberBetween(1),
+        'specialty_id' => $faker->numberBetween(1,3),
         'doctor_id' => $faker->randomElement($doctorIds),
         'patient_id' => $faker->randomElement($patientIds),
         'scheduled_date' => $scheduled_date,

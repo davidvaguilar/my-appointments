@@ -26,6 +26,9 @@ npm run dev
 
 npm run watch
 
+
+composer require barryvdh/laravel-dompdf
+
 //LARAVEL ECHO
 npm install --save laravel-echo pusher-js
 
