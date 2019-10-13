@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
 
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
-            $table->string('role')->default('pacient');  // 'admin', 'pacient', 'doctor'
+            $table->string('role')->default('patient');  // 'admin', 'pacient', 'doctor'
 
 
             $table->rememberToken();
