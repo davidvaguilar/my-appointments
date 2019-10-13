@@ -33,7 +33,7 @@
           <th scope="col">Opciones</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody> 
 
         @foreach( $specialties as $specialty )
         <tr>
