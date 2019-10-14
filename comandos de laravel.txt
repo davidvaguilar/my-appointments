@@ -40,3 +40,30 @@ git checkout -b maria
 git checkout master
 
 git checkout -b sebastian
+
+
+JWT Token
+
+composer require miladrahimi/larajwt:2.*
+
+php artisan vendor:publish --tag=larajwt-config
+
+Conceptos
+
+HTTP Requests (Android)
+Sin dependencias
+
+- AsyncTask
+- Thread
+
+Retrofit
+- URL base
+- Rutas
+- Parametros
+- Callback
+- GsonConverter -> Json a Objetos
+
+- Interceptor
+- RxAndroid
+
+{"name": "Juan", "edad":23}

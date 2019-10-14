@@ -24,7 +24,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'pivot' // para ocultar
+        'password', 'remember_token', 'pivot', // para ocultar
+        'email_verified_at', 'created_at', 'updated_at'
     ];
 
     public function specialties(){
