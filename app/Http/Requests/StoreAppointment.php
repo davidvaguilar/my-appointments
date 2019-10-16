@@ -18,11 +18,14 @@ class StoreAppointment extends FormRequest
 
     public function authorize()
     {
+        
         return true;
+        
     }
 
     public function rules()
     {
+       
         return [
             'description' => 'required',
             'specialty_id' => 'exists:specialties,id',
@@ -32,13 +35,14 @@ class StoreAppointment extends FormRequest
     }
 
     public function messages(){
-        $messages = [
+        return [
             'scheduled_time.required' => 'Por favor seleccione hora válida para su cita.'
         ];
+       
     }
 
     public function withValidator( $validator ){
-
+        
         $validator->after( function($validator) {
             $date = $this->input('scheduled_date');
             $doctorId = $this->input('doctor_id');
@@ -49,7 +53,7 @@ class StoreAppointment extends FormRequest
             } 
             $start = new Carbon($scheduled_time);
 
-            if( !$this->$scheduleService->isAvailableInterval($date, $doctorId, $start) ){
+            if( !$this->scheduleService->isAvailableInterval($date, $doctorId, $start) ){
             $validator->errors()
                 ->add('available_time', 'La hora seleccionada ya se encuentra reservada por otro paciente.');
             }

@@ -133,7 +133,7 @@ class AppointmentController extends Controller
       //right time formato
       $carbonTime = Carbon::createFromFormat('g:i A', $data['scheduled_time']);
       $data['scheduled_time'] = $carbonTime->format('H:i:s');*/
-
+      
       $created = Appointment::createForPatient( $request, auth()->id() );
 
       if($created){
