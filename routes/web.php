@@ -46,15 +46,22 @@ Route::middleware(['auth', 'doctor'])->namespace('Doctor')->group(function() {
 });
 
 Route::middleware('auth')->group(function() {
-  Route::get('/appointments/create', 'AppointmentController@create');
-  Route::post('/appointments', 'AppointmentController@store');
+  Route::get('/profile', 'UserController@edit');
+  Route::post('/profile', 'UserController@update');  
 
-  Route::get('/appointments', 'AppointmentController@index');
-  Route::get('/appointments/{appointment}', 'AppointmentController@show');
+  Route::middleware('phone')->group(function() {
+    Route::get('/appointments', 'AppointmentController@index');
+    Route::get('/appointments/create', 'AppointmentController@create');
+  });
+
+  Route::get('/appointments/{appointment}', 'AppointmentController@show');  //ver cita
+  Route::post('/appointments', 'AppointmentController@store');  //procesar formulario
 
   Route::get('/appointments/{appointment}/cancel', 'AppointmentController@showCancelForm');
   Route::post('/appointments/{appointment}/cancel', 'AppointmentController@postCancel');
   Route::post('/appointments/{appointment}/confirm', 'AppointmentController@postConfirm');
+
+
 
   //JSON pasaron a ser recursos publicos
   /*Route::get('/specialties/{specialty}/doctors', 'Api\SpecialtyController@doctors');

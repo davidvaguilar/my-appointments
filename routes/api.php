@@ -31,9 +31,15 @@ Route::middleware('auth:api')->group(function() {
     });*/
 
     Route::get('/user', 'UserController@show');
+    Route::post('/user', 'UserController@update');
+
     Route::post('/logout', 'AuthController@logout');
 
-    // post appointment
+    
+    Route::get('/appointments', 'AppointmentController@index');
+    Route::post('/appointments', 'AppointmentController@store');
+
+    Route::post('/fcm/token', 'FirebaseController@postToken');
     
 
 });
